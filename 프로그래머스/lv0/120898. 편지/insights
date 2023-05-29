@@ -16,5 +16,5 @@ def solution(message):
 
 #예를 들어, message의 길이가 5라면, len(message) << 1은 5 << 1과 동일하게 작동하여 10을 반환합니다.
 
-#따라서 solution 함수는 주어진 message의 길이의 2배를 반환하는 기능을 가지고 있습니다.
+#따라서 solution 함수는 주어진 message의 길이의  2배를 반환하는 기능을 가지고 있습니다.
  
