@@ -1,0 +1,38 @@
+# -- 코드를 입력하세요
+# with T as (
+#     SELECT 
+#     a.MEMBER_ID,
+#     a.MEMBER_NAME,
+#     b.REVIEW_TEXT, 
+#     DATE_FORMAT(b.REVIEW_DATE,'%Y-%m-%d') as REVIEW_DATE,
+#     RANK() OVER (order by COUNT(b.REVIEW_ID) desc) as rk
+#     from MEMBER_PROFILE a 
+#     right join REST_REVIEW b on a.MEMBER_ID = b.MEMBER_ID
+#     group by a.MEMBER_ID
+#     order by rk
+# )
+# select t.MEMBER_NAME, r.REVIEW_TEXT, t.REVIEW_DATE
+# from T t
+# right join REST_REVIEW r on  t.MEMBER_ID = r.MEMBER_ID
+# where rk = 1
+# order by 3, 2
+
+WITH REVIEW_COUNT AS (
+  SELECT MEMBER_ID, COUNT(*) AS CNT
+  FROM REST_REVIEW
+  GROUP BY MEMBER_ID
+),
+TOP_REVIEWER AS (
+  SELECT MEMBER_ID
+  FROM REVIEW_COUNT
+  ORDER BY CNT DESC
+  LIMIT 1
+)
+SELECT 
+  p.MEMBER_NAME,
+  r.REVIEW_TEXT,
+  DATE_FORMAT(r.REVIEW_DATE, '%Y-%m-%d') AS REVIEW_DATE
+FROM REST_REVIEW r
+JOIN MEMBER_PROFILE p ON r.MEMBER_ID = p.MEMBER_ID
+JOIN TOP_REVIEWER t ON r.MEMBER_ID = t.MEMBER_ID
+ORDER BY r.REVIEW_DATE ASC, r.REVIEW_TEXT ASC;
